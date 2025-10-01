@@ -2,6 +2,7 @@
 
 import requests
 import argparse
+from bs4 import BeautifulSoup
 
 from urllib.parse import urlparse
 
@@ -12,9 +13,16 @@ def make_request(url: str) -> str:
         return r.text
     except requests.exceptions.RequestException as e:
         print('Error: %s' % e)
-        return None
+        return
+    except KeyboardInterrupt:
+        return
 
 
+def parse_data(data: str) -> list[str]:
+    soup = BeautifulSoup(data, 'html.parser')
+    return soup.prettify()
+    
+    
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -30,7 +38,9 @@ def main():
         print('Invalid URL: %s' % args.url)
         return
     
-    print(make_request(args.url))
+    data = make_request(args.url)
+    parsed_data = parse_data(data)
+    print(parsed_data)
 
 
 if __name__ == '__main__':
