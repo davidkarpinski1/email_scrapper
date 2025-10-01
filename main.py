@@ -19,8 +19,16 @@ def make_request(url: str) -> str:
 
 
 def parse_data(data: str) -> list[str]:
-    soup = BeautifulSoup(data, 'html.parser')
-    return soup.prettify()
+    try:
+        soup = BeautifulSoup(data, 'html.parser')
+        links = soup.find_all('a')
+        for link in links:
+            href = link.get('href')
+            if href.startswith('mailto:'):
+                print(href.split(':')[1])
+    except Exception as e:
+        print('Error: %s' % e)
+        return
     
     
 def main():
@@ -40,7 +48,6 @@ def main():
     
     data = make_request(args.url)
     parsed_data = parse_data(data)
-    print(parsed_data)
 
 
 if __name__ == '__main__':
