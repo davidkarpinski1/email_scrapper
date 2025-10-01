@@ -17,5 +17,5 @@ pip install -r requirements.txt
 ### Usage
 
 ```shell
-python ./main.py
+python ./main.py -u <URL>
 ```
