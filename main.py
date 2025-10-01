@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 
+import requests
 import argparse
 
 from urllib.parse import urlparse
+
+
+def make_request(url: str) -> str:
+    try:
+        r = requests.get(url)
+        return r.text
+    except requests.exceptions.RequestException as e:
+        print('Error: %s' % e)
+        return None
 
 
 def main():
@@ -15,12 +25,12 @@ def main():
     )
     args = parser.parse_args()
     
-    parsed = urlparse(args.url)
+    parsed : str = urlparse(args.url)
     if not (parsed.scheme in ("http", "https") and parsed.netloc):
         print('Invalid URL: %s' % args.url)
         return
     
-    print(args.url)
+    print(make_request(args.url))
 
 
 if __name__ == '__main__':
